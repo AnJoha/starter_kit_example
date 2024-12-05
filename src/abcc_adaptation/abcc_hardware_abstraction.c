@@ -23,10 +23,10 @@
 #include "abcc_port.h"
 #include "abcc.h"
 
-#include "abcc_system_adaptation.h"
-#include "abcc_system_adaptation_spi.h"
-#include "abcc_system_adaptation_parallel.h"
-#include "abcc_system_adaptation_serial.h"
+#include "abcc_hardware_abstraction.h"
+#include "abcc_hardware_abstraction_spi.h"
+#include "abcc_hardware_abstraction_parallel.h"
+#include "abcc_hardware_abstraction_serial.h"
 
 
 BOOL ABCC_StartTransportProvider( void );

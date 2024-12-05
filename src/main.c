@@ -27,7 +27,7 @@
 #include "conio.h"
 
 #include "abcc.h"
-#include "abcc_system_adaptation.h"
+#include "abcc_hardware_abstraction.h"
 #include "application_data_object.h"
 #include "abcc_types.h"
 #include "application_abcc_handler.h"

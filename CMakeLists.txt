@@ -29,7 +29,7 @@ set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT h
 set(host_application_SRCS
   ${PROJECT_SOURCE_DIR}/src/example_application/application_data_instance_mapping_speed_example.c
   ${PROJECT_SOURCE_DIR}/src/abcc_adaptation/abcc_software_port.c
-    ${PROJECT_SOURCE_DIR}/src/abcc_adaptation/abcc_system_adaptation.c
+    ${PROJECT_SOURCE_DIR}/src/abcc_adaptation/abcc_hardware_abstraction.c
   ${PROJECT_SOURCE_DIR}/src/abcc_adaptation/pctransportprovider/imp_tp.c
   ${PROJECT_SOURCE_DIR}/stdafx.cpp
 )
