@@ -1,11 +1,11 @@
 /*******************************************************************************
 ********************************************************************************
 **                                                                            **
-** ABCC Starter Kit version 390fce4 (2024-10-25)                              **
+** ABCC Starter Kit version 003e7c1 (2024-11-29)                              **
 **                                                                            **
 ** Delivered with:                                                            **
 **    ABP            c799efc (2024-05-14)                                     **
-**    ABCC Driver    edc67ee (2024-10-25)                                     **
+**    ABCC Driver    0401fde (2024-11-13)                                     **
 **                                                                            */
 /*******************************************************************************
 ** Copyright 2015-present HMS Industrial Networks AB.
@@ -91,12 +91,35 @@
 ** Debug and error macro configuration
 **------------------------------------------------------------------------------
 */
-#define ABCC_CFG_ERR_REPORTING_ENABLED             1
-#define ABCC_CFG_DEBUG_LOG_COLORS_ENABLED          1
-#define ABCC_CFG_DEBUG_TIMESTAMPS_ENABLED          1
-#define ABCC_CFG_DEBUG_EVENT_ENABLED               1
-#define ABCC_CFG_DEBUG_ERR_ENABLED                 1
+#define ABCC_CFG_MESSAGE_SIZE_CHECK_ENABLED      1
 
-#define TP_ERROR_STRINGS                           1
+#define ANB_FSI_OBJ_ENABLE 1
+#define APP_IA_SER_NUM_ENABLE 1
+#define APP_IA_SER_NUM_VALUE 0x12345678
+
+/*------------------------------------------------------------------------------
+** Debug level configuration
+**
+** Configures the level of debug logging.
+**
+** One of:
+** ABCC_LOG_SEVERITY_FATAL_ENABLED
+** ABCC_LOG_SEVERITY_ERROR_ENABLED
+** ABCC_LOG_SEVERITY_WARNING_ENABLED
+** ABCC_LOG_SEVERITY_INFO_ENABLED
+** ABCC_LOG_SEVERITY_DEBUG_ENABLED
+**------------------------------------------------------------------------------
+*/
+#define ABCC_CFG_LOG_SEVERITY ABCC_LOG_SEVERITY_INFO_ENABLED
+#define ABCC_CFG_LOG_FILE_LINE_ENABLED 1
+#define ABCC_CFG_LOG_TIMESTAMPS_ENABLED 1
+#define ABCC_CFG_LOG_STRINGS_ENABLED 1
+#define ABCC_CFG_LOG_COLORS_ENABLED 1
+#define ABCC_CFG_DEBUG_CMD_SEQ_ENABLED 1
+#define ABCC_CFG_DEBUG_MESSAGING_ENABLED 0
+#define ABCC_CFG_DEBUG_HEXDUMP_SPI_ENABLED 0
+#define ABCC_CFG_DEBUG_HEXDUMP_UART_ENABLED 0
+
+#define APPL_SELECT_FIRMWARE_DEBUG_ENABLED 1
 
 #endif  /* inclusion lock */

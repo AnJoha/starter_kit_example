@@ -1,11 +1,11 @@
 /*******************************************************************************
 ********************************************************************************
 **                                                                            **
-** ABCC Starter Kit version 390fce4 (2024-10-25)                              **
+** ABCC Starter Kit version 003e7c1 (2024-11-29)                              **
 **                                                                            **
 ** Delivered with:                                                            **
 **    ABP            c799efc (2024-05-14)                                     **
-**    ABCC Driver    edc67ee (2024-10-25)                                     **
+**    ABCC Driver    0401fde (2024-11-13)                                     **
 **                                                                            */
 /*******************************************************************************
 ** Copyright 2013-present HMS Industrial Networks AB.
@@ -85,7 +85,7 @@ int main( void )
    ** it.
    */
    BOOL8          fQuit = FALSE;
-   APPL_AbccHandlerStatusType eAbccHandlerStatus = APPL_MODULE_NO_ERROR;
+   ABCC_ErrorCodeType eErrorCode = ABCC_EC_NO_ERROR;
    const UINT16   iSleepTimeMS = 10;
    DWORD          lThen, lNow, lDiff;
 
@@ -111,24 +111,16 @@ int main( void )
 
    while( !fQuit  )
    {
-      eAbccHandlerStatus = APPL_HandleAbcc();
-      fQuit = RunUi();
-      switch( eAbccHandlerStatus )
+      eErrorCode = APPL_HandleAbcc();
+
+      if( eErrorCode != ABCC_EC_NO_ERROR )
       {
-      case APPL_MODULE_NO_ERROR:
-         break;
-      case APPL_MODULE_RESET:
-         APPL_RestartAbcc();
-         break;
-      case APPL_MODULE_NOT_DETECTED:
-      case APPL_MODULE_NOT_SUPPORTED:
-      case APPL_MODULE_NOT_ANSWERING:
-      case APPL_MODULE_SHUTDOWN:
-      case APPL_MODULE_UNEXPECTED_ERROR:
-      default:
-         printf( "\nAPPL_HandleAbcc() returned status code: %d\n", eAbccHandlerStatus );
+         printf( "\nAPPL_HandleAbcc() returned status code: %d\n", eErrorCode );
          fQuit = TRUE;
-         break;
+      }
+      else
+      {
+         fQuit = RunUi();
       }
 
       lNow = timeGetTime();
@@ -158,9 +150,10 @@ int main( void )
       }
    }
 
+   APPL_Shutdown();
    TP_Shutdown();
 
-   if( eAbccHandlerStatus != APPL_MODULE_NO_ERROR )
+   if( eErrorCode != ABCC_EC_NO_ERROR )
    {
       printf( "Press any key to quit.\n" );
       while( !_kbhit() )

@@ -1,11 +1,11 @@
 /*******************************************************************************
 ********************************************************************************
 **                                                                            **
-** ABCC Starter Kit version 390fce4 (2024-10-25)                              **
+** ABCC Starter Kit version 003e7c1 (2024-11-29)                              **
 **                                                                            **
 ** Delivered with:                                                            **
 **    ABP            c799efc (2024-05-14)                                     **
-**    ABCC Driver    edc67ee (2024-10-25)                                     **
+**    ABCC Driver    0401fde (2024-11-13)                                     **
 **                                                                            */
 /*******************************************************************************
 ** Copyright 2013-present HMS Industrial Networks AB.
@@ -96,8 +96,7 @@ static UINT8 TP_Command( UINT8 bCommand )
 
    if ( eStatus != TP_ERR_NONE )
    {
-      ABCC_DEBUG_ERR( "Transport provider error %d\n", eStatus );
-      ABCC_ERROR( ABCC_SEV_WARNING, ABCC_EC_SYS_ADAPTION_ERR, (UINT32)eStatus );
+      ABCC_LOG_WARNING( ABCC_EC_SYS_ADAPTION_ERR, (UINT32)eStatus, "Transport provider error %d\n", eStatus );
    }
    return( sMsg.sRsp.abData[0] );
 }
@@ -170,8 +169,10 @@ void ABCC_SYS_SpiSendReceive( void* pxSendDataBuffer, void* pxReceiveDataBuffer,
    }
    else
    {
-      ABCC_DEBUG_ERR( "ERROR in SPI transaction: ERR: 0x%x\n", eStatus );
-      ABCC_ERROR( ABCC_SEV_WARNING, ABCC_EC_SYS_ADAPTION_ERR, (UINT32)eStatus );
+      ABCC_LOG_WARNING( ABCC_EC_SYS_ADAPTION_ERR, 
+         (UINT32)eStatus, 
+         "ERROR in SPI transaction: ERR: 0x%x\n", 
+         eStatus );
    }
 }
 #endif
@@ -193,8 +194,10 @@ void ABCC_SYS_ParallelRead( UINT16 iMemOffset, void* pxData, UINT16 iLength )
    }
    else
    {
-      ABCC_DEBUG_ERR( "Read failed with error code %x\n", eLastReceivedTpPariStatus );
-      ABCC_ERROR( ABCC_SEV_WARNING, ABCC_EC_SYS_ADAPTION_ERR, (UINT32)eLastReceivedTpPariStatus );
+      ABCC_LOG_WARNING( ABCC_EC_SYS_ADAPTION_ERR, 
+         (UINT32)eLastReceivedTpPariStatus, 
+         "Read failed with error code %x\n", 
+         eLastReceivedTpPariStatus );
    }
 }
 
@@ -217,8 +220,10 @@ void ABCC_SYS_ParallelWrite( UINT16 iMemOffset, void* pxData, UINT16 iLength )
 
    if( eLastReceivedTpPariStatus != TP_ERR_NONE )
    {
-      ABCC_DEBUG_ERR( "Write failed with error code %x\n", eLastReceivedTpPariStatus );
-      ABCC_ERROR( ABCC_SEV_WARNING, ABCC_EC_SYS_ADAPTION_ERR, (UINT32)eLastReceivedTpPariStatus );
+      ABCC_LOG_WARNING( ABCC_EC_SYS_ADAPTION_ERR, 
+         (UINT32)eLastReceivedTpPariStatus, 
+         "Write failed with error code %x\n", 
+         eLastReceivedTpPariStatus );
    }
 }
 
@@ -335,8 +340,9 @@ void ABCC_SYS_SerSendReceive( void* pxTxDataBuffer, void* pxRxDataBuffer, UINT16
 
    if (eStatus != TP_ERR_NONE )
    {
-      ABCC_DEBUG_ERR( "Serial TX error: ERR: 0x%x", eStatus );
-      ABCC_ERROR( ABCC_SEV_WARNING, ABCC_EC_SYS_ADAPTION_ERR, (UINT32)eStatus );
+      ABCC_LOG_WARNING( ABCC_EC_SYS_ADAPTION_ERR, 
+         (UINT32)eStatus,
+         "Serial TX error: ERR: 0x%x", eStatus );
       return;
    }
 
@@ -359,7 +365,7 @@ void ABCC_SYS_SerSendReceive( void* pxTxDataBuffer, void* pxRxDataBuffer, UINT16
          }
          else
          {
-            ABCC_DEBUG_ERR( "Serial RX timeout!\n" );
+            ABCC_LOG_WARNING( ABCC_EC_SYS_ADAPTION_ERR, 0, "Serial RX timeout!\n" );
             break;
          }
       }
@@ -372,8 +378,9 @@ void ABCC_SYS_SerSendReceive( void* pxTxDataBuffer, void* pxRxDataBuffer, UINT16
 
    if ( eStatus != TP_ERR_NONE )
    {
-      ABCC_DEBUG_ERR( "Serial RX error: ERR: 0x%x\n", eStatus );
-      ABCC_ERROR( ABCC_SEV_WARNING, ABCC_EC_SYS_ADAPTION_ERR, (UINT32)eStatus );
+      ABCC_LOG_WARNING( ABCC_EC_SYS_ADAPTION_ERR, 
+         (UINT32)eStatus, 
+         "Serial RX error: ERR: 0x%x\n", eStatus );
       return;
    }
 
@@ -459,7 +466,7 @@ BOOL ABCC_StartTransportProvider( void )
 
    if ( eStatus != TP_ERR_NONE )
    {
-      ABCC_DEBUG_ERR( "TP_Init failed: %d\n", eStatus );
+      ABCC_LOG_ERROR( ABCC_EC_SYS_ADAPTION_ERR, (UINT32)eStatus, "TP_Init failed: %d\n", eStatus );
       return( FALSE );
    }
 
@@ -482,7 +489,7 @@ BOOL ABCC_StartTransportProvider( void )
 
    if( eStatus != TP_ERR_NONE )
    {
-      ABCC_DEBUG_ERR( "TP_UserSelectPath: %d\n", eStatus );
+      ABCC_LOG_ERROR( ABCC_EC_SYS_ADAPTION_ERR, (UINT32)eStatus, "TP_UserSelectPath failed: %d\n", eStatus );
       return( FALSE );
    }
 
@@ -495,7 +502,7 @@ BOOL ABCC_StartTransportProvider( void )
 
       if( eStatus != TP_ERR_NONE )
       {
-         ABCC_DEBUG_ERR( "TP_SpiOpen: %d\n", eStatus );
+         ABCC_LOG_ERROR( ABCC_EC_SYS_ADAPTION_ERR, (UINT32)eStatus, "TP_SpiOpen failed: %d\n", eStatus );
          return( FALSE );
       }
       sys_bOpmode = ABP_OP_MODE_SPI;
@@ -508,11 +515,9 @@ BOOL ABCC_StartTransportProvider( void )
 
       if( eStatus != TP_ERR_NONE )
       {
-         ABCC_DEBUG_ERR( "TP_ParallelOpen: %d\n", eStatus );
+         ABCC_LOG_ERROR( ABCC_EC_SYS_ADAPTION_ERR, (UINT32)eStatus, "TP_ParallelOpen failed: %d\n", eStatus );
          return( FALSE );
       }
-
-
 
       if( ( TP_Command( 0x17 ) & 0x03 ) == 0x01 )
       {
@@ -531,7 +536,7 @@ BOOL ABCC_StartTransportProvider( void )
 
        if( eStatus != TP_ERR_NONE )
        {
-          ABCC_DEBUG_ERR( "TP_SerialOpen: %d\n", eStatus );
+          ABCC_LOG_ERROR( ABCC_EC_SYS_ADAPTION_ERR, (UINT32)eStatus, "TP_SerialOpen failed: %d\n", eStatus );
           return( FALSE );
        }
         sys_bOpmode = ABP_OP_MODE_SERIAL_57_6;
@@ -539,7 +544,7 @@ BOOL ABCC_StartTransportProvider( void )
 
    default:
 
-      ABCC_DEBUG_ERR( "TP_ParallelOpen: %d\n", eStatus );
+      ABCC_LOG_ERROR( ABCC_EC_SYS_ADAPTION_ERR, (UINT32)eStatus, "Unsupported operating mode: %d\n", eInterface );
       sys_bOpmode = 0;
       return( FALSE );
       break;

@@ -24,8 +24,6 @@
 #include "application_data_instance_config.h"
 #include "abcc.h"
 
-#if ( APPL_ACTIVE_ADI_SETUP == APPL_ADI_SETUP_SPEED_EXAMPLE )
-
 #if (  ABCC_CFG_STRUCT_DATA_TYPE_ENABLED || ABCC_CFG_ADI_GET_SET_CALLBACK_ENABLED )
    #error ABCC_CFG_ADI_GET_SET_CALLBACK_ENABLED must be set to 0 and ABCC_CFG_STRUCT_DATA_TYPE_ENABLED set to 0 in order to run this example
 #endif
@@ -34,20 +32,39 @@
 ** Access descriptor for the ADIs
 **------------------------------------------------------------------------------
 */
-#define APPL_READ_MAP_READ_ACCESS_DESC ( ABP_APPD_DESCR_GET_ACCESS |           \
-                                         ABP_APPD_DESCR_MAPPABLE_READ_PD )
+#define AD_ADI_DESC______  ( 0                            | 0                               | 0                                | 0                         | 0                         )
+#define AD_ADI_DESC_____G  ( 0                            | 0                               | 0                                | 0                         | ABP_APPD_DESCR_GET_ACCESS )
+#define AD_ADI_DESC____S_  ( 0                            | 0                               | 0                                | ABP_APPD_DESCR_SET_ACCESS | 0                         )
+#define AD_ADI_DESC____SG  ( 0                            | 0                               | 0                                | ABP_APPD_DESCR_SET_ACCESS | ABP_APPD_DESCR_GET_ACCESS )
+#define AD_ADI_DESC___W__  ( 0                            | 0                               | ABP_APPD_DESCR_MAPPABLE_WRITE_PD | 0                         | 0                         )
+#define AD_ADI_DESC___W_G  ( 0                            | 0                               | ABP_APPD_DESCR_MAPPABLE_WRITE_PD | 0                         | ABP_APPD_DESCR_GET_ACCESS )
+#define AD_ADI_DESC___WS_  ( 0                            | 0                               | ABP_APPD_DESCR_MAPPABLE_WRITE_PD | ABP_APPD_DESCR_SET_ACCESS | 0                         )
+#define AD_ADI_DESC___WSG  ( 0                            | 0                               | ABP_APPD_DESCR_MAPPABLE_WRITE_PD | ABP_APPD_DESCR_SET_ACCESS | ABP_APPD_DESCR_GET_ACCESS )
+#define AD_ADI_DESC__R___  ( 0                            | ABP_APPD_DESCR_MAPPABLE_READ_PD | 0                                | 0                         | 0                         )
+#define AD_ADI_DESC__R__G  ( 0                            | ABP_APPD_DESCR_MAPPABLE_READ_PD | 0                                | 0                         | ABP_APPD_DESCR_GET_ACCESS )
+#define AD_ADI_DESC__R_S_  ( 0                            | ABP_APPD_DESCR_MAPPABLE_READ_PD | 0                                | ABP_APPD_DESCR_SET_ACCESS | 0                         )
+#define AD_ADI_DESC__R_SG  ( 0                            | ABP_APPD_DESCR_MAPPABLE_READ_PD | 0                                | ABP_APPD_DESCR_SET_ACCESS | ABP_APPD_DESCR_GET_ACCESS )
+#define AD_ADI_DESC__RW__  ( 0                            | ABP_APPD_DESCR_MAPPABLE_READ_PD | ABP_APPD_DESCR_MAPPABLE_WRITE_PD | 0                         | 0                         )
+#define AD_ADI_DESC__RW_G  ( 0                            | ABP_APPD_DESCR_MAPPABLE_READ_PD | ABP_APPD_DESCR_MAPPABLE_WRITE_PD | 0                         | ABP_APPD_DESCR_GET_ACCESS )
+#define AD_ADI_DESC__RWS_  ( 0                            | ABP_APPD_DESCR_MAPPABLE_READ_PD | ABP_APPD_DESCR_MAPPABLE_WRITE_PD | ABP_APPD_DESCR_SET_ACCESS | 0                         )
+#define AD_ADI_DESC__RWSG  ( 0                            | ABP_APPD_DESCR_MAPPABLE_READ_PD | ABP_APPD_DESCR_MAPPABLE_WRITE_PD | ABP_APPD_DESCR_SET_ACCESS | ABP_APPD_DESCR_GET_ACCESS )
+#define AD_ADI_DESC_N____  ( ABP_APPD_DESCR_NVS_PARAMETER | 0                               | 0                                | 0                         | 0                         )
+#define AD_ADI_DESC_N___G  ( ABP_APPD_DESCR_NVS_PARAMETER | 0                               | 0                                | 0                         | ABP_APPD_DESCR_GET_ACCESS )
+#define AD_ADI_DESC_N__S_  ( ABP_APPD_DESCR_NVS_PARAMETER | 0                               | 0                                | ABP_APPD_DESCR_SET_ACCESS | 0                         )
+#define AD_ADI_DESC_N__SG  ( ABP_APPD_DESCR_NVS_PARAMETER | 0                               | 0                                | ABP_APPD_DESCR_SET_ACCESS | ABP_APPD_DESCR_GET_ACCESS )
+#define AD_ADI_DESC_N_W__  ( ABP_APPD_DESCR_NVS_PARAMETER | 0                               | ABP_APPD_DESCR_MAPPABLE_WRITE_PD | 0                         | 0                         )
+#define AD_ADI_DESC_N_W_G  ( ABP_APPD_DESCR_NVS_PARAMETER | 0                               | ABP_APPD_DESCR_MAPPABLE_WRITE_PD | 0                         | ABP_APPD_DESCR_GET_ACCESS )
+#define AD_ADI_DESC_N_WS_  ( ABP_APPD_DESCR_NVS_PARAMETER | 0                               | ABP_APPD_DESCR_MAPPABLE_WRITE_PD | ABP_APPD_DESCR_SET_ACCESS | 0                         )
+#define AD_ADI_DESC_N_WSG  ( ABP_APPD_DESCR_NVS_PARAMETER | 0                               | ABP_APPD_DESCR_MAPPABLE_WRITE_PD | ABP_APPD_DESCR_SET_ACCESS | ABP_APPD_DESCR_GET_ACCESS )
+#define AD_ADI_DESC_NR___  ( ABP_APPD_DESCR_NVS_PARAMETER | ABP_APPD_DESCR_MAPPABLE_READ_PD | 0                                | 0                         | 0                         )
+#define AD_ADI_DESC_NR__G  ( ABP_APPD_DESCR_NVS_PARAMETER | ABP_APPD_DESCR_MAPPABLE_READ_PD | 0                                | 0                         | ABP_APPD_DESCR_GET_ACCESS )
+#define AD_ADI_DESC_NR_S_  ( ABP_APPD_DESCR_NVS_PARAMETER | ABP_APPD_DESCR_MAPPABLE_READ_PD | 0                                | ABP_APPD_DESCR_SET_ACCESS | 0                         )
+#define AD_ADI_DESC_NR_SG  ( ABP_APPD_DESCR_NVS_PARAMETER | ABP_APPD_DESCR_MAPPABLE_READ_PD | 0                                | ABP_APPD_DESCR_SET_ACCESS | ABP_APPD_DESCR_GET_ACCESS )
+#define AD_ADI_DESC_NRW__  ( ABP_APPD_DESCR_NVS_PARAMETER | ABP_APPD_DESCR_MAPPABLE_READ_PD | ABP_APPD_DESCR_MAPPABLE_WRITE_PD | 0                         | 0                         )
+#define AD_ADI_DESC_NRW_G  ( ABP_APPD_DESCR_NVS_PARAMETER | ABP_APPD_DESCR_MAPPABLE_READ_PD | ABP_APPD_DESCR_MAPPABLE_WRITE_PD | 0                         | ABP_APPD_DESCR_GET_ACCESS )
+#define AD_ADI_DESC_NRWS_  ( ABP_APPD_DESCR_NVS_PARAMETER | ABP_APPD_DESCR_MAPPABLE_READ_PD | ABP_APPD_DESCR_MAPPABLE_WRITE_PD | ABP_APPD_DESCR_SET_ACCESS | 0                         )
+#define AD_ADI_DESC_NRWSG  ( ABP_APPD_DESCR_NVS_PARAMETER | ABP_APPD_DESCR_MAPPABLE_READ_PD | ABP_APPD_DESCR_MAPPABLE_WRITE_PD | ABP_APPD_DESCR_SET_ACCESS | ABP_APPD_DESCR_GET_ACCESS )
 
-#define APPL_READ_MAP_WRITE_ACCESS_DESC ( ABP_APPD_DESCR_GET_ACCESS |          \
-                                          ABP_APPD_DESCR_SET_ACCESS |          \
-                                          ABP_APPD_DESCR_MAPPABLE_READ_PD )
-
-#define APPL_WRITE_MAP_READ_ACCESS_DESC ( ABP_APPD_DESCR_GET_ACCESS |          \
-                                          ABP_APPD_DESCR_MAPPABLE_WRITE_PD )
-
-#define APPL_NOT_MAP_READ_ACCESS_DESC ( ABP_APPD_DESCR_GET_ACCESS )
-
-#define APPL_NOT_MAP_WRITE_ACCESS_DESC ( ABP_APPD_DESCR_GET_ACCESS |           \
-                                         ABP_APPD_DESCR_SET_ACCESS )
 
 /*------------------------------------------------------------------------------
 ** Data holder for the ADI instances
@@ -68,8 +85,8 @@ static AD_UINT16Type appl_sUint16Prop = { { 0, 0xFFFF, 0 } };
 */
 const AD_AdiEntryType APPL_asAdiEntryList[] =
 {
-   {  0x1,  "SPEED",     ABP_UINT16,   1, APPL_WRITE_MAP_READ_ACCESS_DESC, { { &appl_iSpeed,    &appl_sUint16Prop } } },
-   {  0x2,  "REF_SPEED", ABP_UINT16,   1, APPL_READ_MAP_WRITE_ACCESS_DESC, { { &appl_iRefSpeed, &appl_sUint16Prop } } }
+   {  0x1,  "SPEED",     ABP_UINT16,   1, AD_ADI_DESC___W_G, { { &appl_iSpeed,    &appl_sUint16Prop } } },
+   {  0x2,  "REF_SPEED", ABP_UINT16,   1, AD_ADI_DESC__R_S_, { { &appl_iRefSpeed, &appl_sUint16Prop } } }
 };
 
 /*------------------------------------------------------------------------------
@@ -90,36 +107,7 @@ UINT16 APPL_GetNumAdi( void )
    return( sizeof( APPL_asAdiEntryList ) / sizeof( AD_AdiEntryType ) );
 }
 
-void APPL_CyclicalProcessing( void )
+void APPL_CyclicalProcessing()
 {
-   if( ABCC_AnbState() == ABP_ANB_STATE_PROCESS_ACTIVE )
-   {
-      /*
-      ** An example of ADI data handling.
-      */
-      if( appl_iSpeed > appl_iRefSpeed )
-      {
-         /*
-         ** Do something that lowers speed.
-         */
-         appl_iSpeed -= 1;
-      }
-      else if( appl_iSpeed < appl_iRefSpeed )
-      {
-         /*
-         ** Do something that increases speed.
-         */
-         appl_iSpeed += 1;
-      }
-   }
-   else
-   {
-      /*
-      ** We are not in process active, the default should be that the motor
-      ** should not run.
-      */
-      appl_iSpeed = 0;
-   }
+	return;
 }
-
-#endif
