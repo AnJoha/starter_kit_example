@@ -8,25 +8,26 @@ set(CMAKE_CONFIGURATION_TYPES "Debug;Release")
 set(CMAKE_GENERATOR_PLATFORM Win32)
 
 # Creating a user host application project.
-project(host_application_project)
+project(starter_kit_example_project)
 
 # Sanity check that this is ran in a supported environment.
 if(${CMAKE_SYSTEM_NAME} STREQUAL "Windows")
 else()
-  message(WARNING "Host ${CMAKE_SYSTEM_NAME} is not supported to build host_application.")
+  message(WARNING "Host ${CMAKE_SYSTEM_NAME} is not supported to build starter_kit_example.")
 endif()
 
 # Creating a user host application executable target.
-add_executable(host_application
+add_executable(starter_kit_example
   ${PROJECT_SOURCE_DIR}/src/main.c
 )
 
 # Changing the default startup project into the executable target.
-set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT host_application)
+set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT starter_kit_example)
 
 # Source (.c) files to add to the executable target. These are 'user unique'. Some are
 # related to the CompactCom Driver.
-set(host_application_SRCS
+set(starter_kit_example_SRCS
+  ${PROJECT_SOURCE_DIR}/src/main.c
   ${PROJECT_SOURCE_DIR}/src/example_application/application_data_instance_mapping_speed_example.c
   ${PROJECT_SOURCE_DIR}/src/example_application/impl_attr_cfb.c
   ${PROJECT_SOURCE_DIR}/src/abcc_adaptation/abcc_software_port.c
@@ -35,11 +36,21 @@ set(host_application_SRCS
   ${PROJECT_SOURCE_DIR}/stdafx.cpp
 )
 
+# Include (.h) files unrelated to the CompactCom Driver.
+set(starter_kit_example_INCS
+  ${PROJECT_SOURCE_DIR}/src/abcc_adaptation/abcc_driver_config.h
+  ${PROJECT_SOURCE_DIR}/src/abcc_adaptation/abcc_software_port.h
+  ${PROJECT_SOURCE_DIR}/src/abcc_adaptation/abcc_types.h
+  ${PROJECT_SOURCE_DIR}/src/abcc_adaptation/pctransportprovider/imp_tp.h
+  ${PROJECT_SOURCE_DIR}/src/abcc_adaptation/pctransportprovider/TP.h
+)
+
 # Adding the 'user unique' sources to the user host application executable target.
-target_sources(host_application PRIVATE ${host_application_SRCS})
+# (The include files are added to keep the file and directory tree structure.)
+target_sources(starter_kit_example PRIVATE ${starter_kit_example_SRCS} ${starter_kit_example_INCS})
 
 # Directories containing include (.h) files unrelated to the CompactCom Driver.
-set(HOST_APPLICATION_INCLUDE_DIRS
+set(starter_kit_example_INCLUDE_DIRS
   ${PROJECT_SOURCE_DIR}/src/
 )
 
@@ -58,10 +69,14 @@ include(${ABCC_DRIVER_DIR}/abcc_driver.cmake)
 
 # Adding both the Anybus CompactCom Driver related and unrelated include (.h) files
 # to the user host application executable target.
-target_include_directories(host_application PRIVATE
-  ${HOST_APPLICATION_INCLUDE_DIRS}
+target_include_directories(starter_kit_example PRIVATE
+  ${starter_kit_example_INCLUDE_DIRS}
   ${ABCC_DRIVER_INCLUDE_DIRS}
 )
 
+# Keeping the file and directory tree structure of the host application when 
+# generating the IDE project.
+source_group(TREE ${PROJECT_SOURCE_DIR} FILES ${starter_kit_example_SRCS} ${starter_kit_example_INCS})
+
 # Linking the Anybus CompactCom Driver library to the executable target.
-target_link_libraries(host_application abcc_driver)
+target_link_libraries(starter_kit_example abcc_driver)
