@@ -1,7 +1,8 @@
-#include "abcc_host_attributes_lookup.h"
+#include "abcc_command_handler_lookup.h"
+#include "application_object.h"
 
 /*------------------------------------------------------------------------------
-** Callback functions used by attribute table.
+** Implementations of callback functions used by command handler lookup table.
 ** **------------------------------------------------------------------------------
 */
 UINT32 ABCC_ImplApplicationObjSerialNum_Get(void)
@@ -9,7 +10,7 @@ UINT32 ABCC_ImplApplicationObjSerialNum_Get(void)
     return( 0xFF000001 );
 }
 
-UINT16 ABCC_ImplApplicationObjVendortName_Get( char* pPackedStrDest, UINT16 iBuffSize )
+UINT16 ABCC_ImplApplicationObjVendorName_Get( char* pPackedStrDest, UINT16 iBuffSize )
 {
    static const char* my_product_name = "My dynamic vendor name";
    UINT16 iStrLength = (UINT16)strlen(my_product_name);
@@ -41,10 +42,6 @@ UINT8 ABCC_ImplApplicationObjFirmwareAvailable_Get( void )
    return( 0 );
 }
 
-
-
-
-
 UINT16 ABCC_ImplEthernetIpObjVendorId_Get( void )
 {
    return( 1133 );
@@ -59,11 +56,6 @@ UINT16 ABCC_ImplEthernetIpObjProductCode_Get( void )
 {
    return( 911 );
 }
-
-
-
-
-
 
 UINT16 ABCC_ImplProfinetIoObjDeviceId_Get( void )
 {
@@ -83,4 +75,9 @@ UINT16 ABCC_ImplProfinetIoObjOrderId_Get( char* pPackedStrDest, UINT16 iBuffSize
    iStrLength = iStrLength > iBuffSize ? iBuffSize : iStrLength;
    memcpy( pPackedStrDest, my_product_name, iStrLength );
    return( iStrLength );
+}
+
+void ABCC_ImplApplicationObj_Reset( ABP_ResetType eResetType )
+{
+   APP_ProcResetRequest( eResetType );
 }
